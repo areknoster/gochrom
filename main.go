@@ -5,21 +5,24 @@ import (
     "fyne.io/fyne/app"
     "fyne.io/fyne/layout"
     "github.com/areknoster/gochrom/pkg/plane"
-    "github.com/areknoster/gochrom/pkg/state"
     "github.com/areknoster/gochrom/pkg/render"
+    "github.com/areknoster/gochrom/pkg/state"
     "github.com/sirupsen/logrus"
 )
 
 type Config struct{
     title string
-    canvasSize fyne.Size
+    CIASize fyne.Size
+    SPDSize fyne.Size
 }
 
 func main(){
-    logrus.SetLevel(logrus.ErrorLevel)
+    logrus.SetLevel(logrus.DebugLevel)
     cfg := Config{
-        title:      "GoFill",
-        canvasSize: fyne.Size{700, 700},
+        title:      "GoChrom",
+        CIASize: fyne.Size{600, 400},
+        SPDSize: fyne.Size{600, 300},
+
     }
 
     fyneApp := app.New()
@@ -27,13 +30,12 @@ func main(){
 
     ss := state.NewStateStorage()
 
-    CIArenderer := render.NewCIA(ss)
-
-    CIAPlane, CIASetMode := plane.NewPlane(CIArenderer, cfg.canvasSize)
+    CIARenderer := render.NewCIE(ss)
+    CIAPlane := plane.NewPlane(CIARenderer, cfg.CIASize)
     ss.AddRefresh(CIAPlane.Refresh)
-    CIASetMode(plane.NewNullMode())
 
-    SPDPlane, SPDSetMode := plane.NewPlane(CIArenderer, cfg.canvasSize)
+    SPDRenderer := render.NewSPD(ss)
+    SPDPlane, SPDSetMode := plane.NewInteractivePlane(SPDRenderer, cfg.SPDSize)
     ss.AddRefresh(SPDPlane.Refresh)
     SPDSetMode(plane.NewSPDEditMode(ss))
 

@@ -2,6 +2,7 @@ package state
 
 import (
 	"github.com/areknoster/gochrom/pkg/gochrom"
+	"github.com/areknoster/gochrom/pkg/spectrum"
 	"sync"
 )
 
@@ -14,7 +15,9 @@ type StateStorage struct {
 var _ gochrom.StateStorage = &StateStorage{}
 
 func NewStateStorage() *StateStorage {
-	state := gochrom.State{}
+	state := gochrom.State{
+		Spectrum: spectrum.NewData(),
+	}
 
 	ss := &StateStorage{
 		stateMx: &sync.Mutex{},
@@ -42,6 +45,6 @@ func (ss *StateStorage) refresh(){
 	}
 }
 
-func (ss *StateStorage)AddRefresh(ref func()){
+func (ss *StateStorage) AddRefresh(ref func()){
 	ss.refreshers = append(ss.refreshers, ref)
 }

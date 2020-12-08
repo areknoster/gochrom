@@ -1,6 +1,7 @@
 package plane
 
 import (
+	"image"
 	"image/color"
 
 	"fyne.io/fyne"
@@ -11,12 +12,16 @@ import (
 
 type PlaneRenderer struct {
 	raster *canvas.Raster
-	plane  *Plane
+	render func(w int, h int) image.Image
+	size fyne.Size
 }
 
-func NewPlaneRenderer(plane *Plane) *PlaneRenderer {
-	pr := &PlaneRenderer{plane: plane}
-	pr.raster = canvas.NewRaster(plane.renderer.Render)
+func NewPlaneRenderer(size fyne.Size, render func(w int, h int) image.Image) *PlaneRenderer {
+	pr := &PlaneRenderer{
+		render: render,
+		size: size,
+	}
+	pr.raster = canvas.NewRaster(render)
 	return pr
 }
 
@@ -32,14 +37,14 @@ func (pr *PlaneRenderer) Layout(size fyne.Size) {
 }
 
 func (pr *PlaneRenderer) MinSize() fyne.Size {
-	return pr.plane.Size()
+	return pr.size
 }
 
 func (pr *PlaneRenderer) Objects() []fyne.CanvasObject {
 	return []fyne.CanvasObject{pr.raster}
 }
 
-func (pr PlaneRenderer) Refresh() {
+func (pr *PlaneRenderer) Refresh() {
 	logrus.Debug("plane: PlaneRenderer is refreshing")
 	canvas.Refresh(pr.raster)
 }

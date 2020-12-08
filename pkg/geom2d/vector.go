@@ -53,6 +53,10 @@ func (v Vector) TimesScalar(s float64) Vector {
 	return Vector{s * v.X, s * v.Y}
 }
 
+func (v Vector) InvertY() Vector {
+	return Vector{v.X, -v.Y}
+}
+
 func (v Vector) DeltaXY() float64 {
 	return v.X / v.Y
 }

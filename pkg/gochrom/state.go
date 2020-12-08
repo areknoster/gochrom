@@ -1,6 +1,9 @@
 package gochrom
 
+import "github.com/areknoster/gochrom/pkg/spectrum"
+
 type State struct {
+    Spectrum *spectrum.Data
 }
 
 type StateStorage interface {
