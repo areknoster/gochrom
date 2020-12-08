@@ -17,7 +17,7 @@ type Config struct{
 }
 
 func main(){
-    logrus.SetLevel(logrus.DebugLevel)
+    logrus.SetLevel(logrus.ErrorLevel)
     cfg := Config{
         title:      "GoChrom",
         CIASize: fyne.Size{600, 400},
