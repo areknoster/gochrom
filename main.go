@@ -4,6 +4,7 @@ import (
     "fyne.io/fyne"
     "fyne.io/fyne/app"
     "fyne.io/fyne/layout"
+    "fyne.io/fyne/widget"
     "github.com/areknoster/gochrom/pkg/plane"
     "github.com/areknoster/gochrom/pkg/render"
     "github.com/areknoster/gochrom/pkg/state"
@@ -34,13 +35,17 @@ func main(){
     CIAPlane := plane.NewPlane(CIARenderer, cfg.CIASize)
     ss.AddRefresh(CIAPlane.Refresh)
 
+    frameImgButton := widget.NewButton("frame image", func(){
+        CIARenderer.ChangeImage()
+        ss.Refresh()
+    })
     SPDRenderer := render.NewSPD(ss)
     SPDPlane, SPDSetMode := plane.NewInteractivePlane(SPDRenderer, cfg.SPDSize)
     ss.AddRefresh(SPDPlane.Refresh)
     SPDSetMode(plane.NewSPDEditMode(ss))
 
 
-    container := fyne.NewContainerWithLayout(layout.NewVBoxLayout(), CIAPlane, SPDPlane)
+    container := fyne.NewContainerWithLayout(layout.NewVBoxLayout(), frameImgButton, CIAPlane, SPDPlane)
     window.SetContent(container)
     window.SetFixedSize(true)
     window.ShowAndRun()

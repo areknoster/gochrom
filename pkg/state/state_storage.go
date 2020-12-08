@@ -36,10 +36,10 @@ func (ss *StateStorage) Set(state gochrom.State) {
 	ss.stateMx.Lock()
 	ss.state = state
 	ss.stateMx.Unlock()
-	ss.refresh()
+	ss.Refresh()
 }
 
-func (ss *StateStorage) refresh(){
+func (ss *StateStorage) Refresh(){
 	for _, refresher := range ss.refreshers {
 		refresher()
 	}
